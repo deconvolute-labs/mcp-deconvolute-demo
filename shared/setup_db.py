@@ -7,7 +7,7 @@ console = Console()
 
 # Ensure the data directory exists
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(BASE_DIR, "scenarios", "trojan_database", "data", "company.db")
+DB_PATH = os.path.join(BASE_DIR, "scenarios", "rug_pull", "data", "company.db")
 
 
 def setup_database():

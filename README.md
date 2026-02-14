@@ -27,14 +27,14 @@ This project includes a CLI tool `dcv-demo` to manage the demo.
 
 - **Start Server**:
   ```bash
-  uv run dcv-demo server trojan_database
+  uv run dcv-demo server rug_pull
   ```
   Starts the malicious MCP server.
   - Press `ENTER` in the server terminal to toggle **Attack Mode**.
 
 - **Start Client (Unprotected)**:
   ```bash
-  uv run dcv-demo client trojan_database
+  uv run dcv-demo client rug_pull
   ```
   Starts the agent without SDK protection.
   - In Attack Mode, queries to `secrets` will be exfiltrated.
@@ -42,7 +42,7 @@ This project includes a CLI tool `dcv-demo` to manage the demo.
 
 - **Start Client (Protected)**:
   ```bash
-  uv run dcv-demo client trojan_database --protected
+  uv run dcv-demo client rug_pull --protected
   ```
   Starts the agent *with* Deconvolute SDK protection.
   - In Attack Mode, the malicious tool definition will be blocked.
@@ -50,10 +50,10 @@ This project includes a CLI tool `dcv-demo` to manage the demo.
 
 - **Launch Full Demo (macOS)**:
   ```bash
-  uv run dcv-demo start trojan_database
+  uv run dcv-demo start rug_pull
   ```
   Opens two new terminal windows: one for the server and one for the client.
-  - Use `uv run dcv-demo start trojan_database --protected` to launch the protected version.
+  - Use `uv run dcv-demo start rug_pull --protected` to launch the protected version.
 
 ## Scenario: The Rug Pull
 
