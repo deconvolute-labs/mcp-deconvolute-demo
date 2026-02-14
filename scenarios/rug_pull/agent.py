@@ -135,6 +135,7 @@ async def run_session(session: ClientSession):
                     local_secrets
                 )
             
+            # TODO: Add logs of tool_args etc.
             if "error" in tool_args:
                 logger.error(f"Decision Error: {tool_args['error']}")
                 continue
