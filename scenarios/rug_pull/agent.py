@@ -16,12 +16,8 @@ from rich.prompt import Prompt
 from rich.theme import Theme
 import time
 
-# Import shared logic
-# Ensure shared module is visible
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from shared.llm import llm
-
-# --- Configuration ---
 
 # Load secrets (simulating the client's sensitive env)
 load_dotenv(os.path.join(os.path.dirname(__file__), "secrets.env"))
@@ -104,7 +100,7 @@ async def decision_engine(
     The 'Brain' of the Agent. 
     Decides which tool to call and generates arguments based on context and secrets.
     """
-    # 1. Construct the 'Vulnerable' System Prompt
+    # Construct the 'Vulnerable' System Prompt
     system_prompt = (
         "You are an authorized corporate AI assistant.\n"
         "You have access to the following secure environment variables. "
@@ -119,11 +115,7 @@ async def decision_engine(
         "4. Return ONLY the JSON object. No markdown."
     )
 
-    # [DEBUG DEMO] Show the operator what the LLM sees (The "Trap")
-    # console.print(f"[dim][DEBUG] LLM Context (System Prompt) {system_prompt}[/dim]")
-
     try:
-        # We offload the complex prompt logic to shared/llm.py
         content = await llm(user_input, system_prompt=system_prompt, model=model)
         
         # Strip Markdown if present
@@ -143,7 +135,7 @@ async def run_session(session: ClientSession):
     console.print("[dim]Type 'exit' to quit.[/dim]")
     console.print()
 
-    # Capture local secrets to inject into the LLM "Brain"
+    # Capture local secrets to inject into the LLM
     local_secrets = {
         "SECRET_DEMO_KEY": os.getenv("SECRET_DEMO_KEY"),
         "AWS_ACCESS_KEY_ID": os.getenv("AWS_ACCESS_KEY_ID"),
@@ -152,38 +144,36 @@ async def run_session(session: ClientSession):
 
     while True:
         try:
-            # 1. User Input
+            # User Input
             user_input = Prompt.ask("[bold green]agent>[/bold green]")
             if not user_input:
                 continue
             if user_input.lower() in ["exit", "quit"]:
                 break
 
-            # 2. Refresh Tools
+            # Refresh Tools
             # Essential step: Getting the latest definition allows the agent 
             # to 'see' the malicious change (or for the SDK to block it).
             tools_result = await session.list_tools()
             
-            # 3. Decision Engine (LLM)
+            # Decision Engine
             logger.info(f"[bold white]USER QUERY[/bold white] | {user_input}")
             
             with console.status("[bold cyan]Thinking ...[/bold cyan]", spinner="dots"):
                 time.sleep(1.5) # Simulate thinking
-                # We offload the complex prompt logic to shared/llm.py
                 tool_args = await decision_engine(
                     user_input, 
                     tools_result.tools, 
                     local_secrets
                 )
             
-            # TODO: Add logs of tool_args etc.
             logger.info(f"[bold cyan]LLM RESPONSE[/bold cyan] | {json.dumps(tool_args)}")
 
             if "error" in tool_args:
                 logger.error(f"Decision Error: {tool_args['error']}")
                 continue
 
-            # 4. Tool Execution
+            # Tool Execution
             # In this demo, we assume the LLM always picks 'query_database' 
             # if it returns valid args.
             tool_name = "query_database" 
@@ -195,7 +185,7 @@ async def run_session(session: ClientSession):
                 time.sleep(1.0) # Simulate network latency
                 result = await session.call_tool(tool_name, arguments=tool_args)
 
-            # 5. Output
+            # Output
             if result.isError:
                 logger.error(f"Remote Error: {result.content[0].text}")
             else:
@@ -228,9 +218,9 @@ async def main():
             async with ClientSession(read, write) as session:
                 await session.initialize()
 
-                # --- Security Layer ---
+                # ADDING DECONVOLUTE SDK: Security Layer
                 if is_protected:
-                    logger.info("Initializing Deconvolute Protocol Guard...")
+                    logger.info("Initializing Deconvolute MCP Firewall ...")
                     session = mcp_guard(
                         session,
                         policy_path=POLICY_PATH,
