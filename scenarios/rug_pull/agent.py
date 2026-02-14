@@ -13,6 +13,8 @@ from mcp.client.sse import sse_client
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.prompt import Prompt
+from rich.theme import Theme
+import time
 
 # Import shared logic
 # Ensure shared module is visible
@@ -39,22 +41,58 @@ except ImportError:
     DECONVOLUTE_AVAILABLE = False
 
 # Logging Setup
-console = Console()
+# Logging Setup
+# Custom theme to match server (white timestamps)
+custom_theme = Theme({
+    "logging.level.info": "white",
+    "logging.level.warning": "yellow",
+    "logging.level.error": "red",
+    "logging.level.critical": "bold red reverse",
+    "repr.number": "bold cyan",
+    "repr.str": "green",
+    "log.time": "white", 
+})
+
+from rich.highlighter import NullHighlighter
+
+console = Console(theme=custom_theme)
 logging.basicConfig(
     level=logging.INFO,
     format="%(message)s",
-    datefmt="[%H:%M:%S]",
+    datefmt="[%Y-%m-%d %H:%M:%S]",
     handlers=[
         RichHandler(
             console=console,
             show_path=False,
             rich_tracebacks=True,
             markup=True,
-            show_time=True
+            show_time=True,
+            omit_repeated_times=False,
+            log_time_format="[%Y-%m-%d %H:%M:%S]",
+            highlighter=NullHighlighter()
         )
     ]
 )
 logger = logging.getLogger("agent")
+
+class DuplicateFilter(logging.Filter):
+    def __init__(self):
+        super().__init__()
+        self.last_log = None
+
+    def filter(self, record):
+        # We must format the message to check for duplicates, 
+        # because the raw record.msg might be a format string like "Request: %s"
+        # which is identical for all requests.
+        current_log = (record.levelno, record.getMessage())
+        if current_log == self.last_log:
+            return False
+        self.last_log = current_log
+        return True
+
+# Apply filter to httpx to reduce noise
+logging.getLogger("httpx").addFilter(DuplicateFilter())
+
 
 async def decision_engine(
     user_input: str, 
@@ -82,7 +120,7 @@ async def decision_engine(
     )
 
     # [DEBUG DEMO] Show the operator what the LLM sees (The "Trap")
-    console.print(f"[dim][DEBUG] LLM Context (System Prompt) {system_prompt}[/dim]")
+    # console.print(f"[dim][DEBUG] LLM Context (System Prompt) {system_prompt}[/dim]")
 
     try:
         # We offload the complex prompt logic to shared/llm.py
@@ -127,7 +165,10 @@ async def run_session(session: ClientSession):
             tools_result = await session.list_tools()
             
             # 3. Decision Engine (LLM)
-            with console.status("[bold cyan]Reasoning...[/bold cyan]", spinner="dots"):
+            logger.info(f"[bold white]USER QUERY[/bold white] | {user_input}")
+            
+            with console.status("[bold cyan]Thinking ...[/bold cyan]", spinner="dots"):
+                time.sleep(1.5) # Simulate thinking
                 # We offload the complex prompt logic to shared/llm.py
                 tool_args = await decision_engine(
                     user_input, 
@@ -136,6 +177,8 @@ async def run_session(session: ClientSession):
                 )
             
             # TODO: Add logs of tool_args etc.
+            logger.info(f"[bold cyan]LLM RESPONSE[/bold cyan] | {json.dumps(tool_args)}")
+
             if "error" in tool_args:
                 logger.error(f"Decision Error: {tool_args['error']}")
                 continue
@@ -146,14 +189,17 @@ async def run_session(session: ClientSession):
             tool_name = "query_database" 
             
             logger.info(f"Invoking Tool: [bold cyan]{tool_name}[/bold cyan]")
+            logger.info(f"Tool Args: {json.dumps(tool_args)}")
             
             with console.status("[bold cyan]Executing remote procedure...[/bold cyan]", spinner="dots"):
+                time.sleep(1.0) # Simulate network latency
                 result = await session.call_tool(tool_name, arguments=tool_args)
 
             # 5. Output
             if result.isError:
                 logger.error(f"Remote Error: {result.content[0].text}")
             else:
+                logger.info(f"[green]SUCCESS[/green] | Server Response Received")
                 console.print(f"\n[bold]Response:[/bold]\n{result.content[0].text}\n")
 
         except Exception as e:
@@ -165,7 +211,7 @@ async def main():
     is_protected = "--protected" in sys.argv
 
     # Header
-    console.print("[bold white]Deconvolute Corporate Agent[/bold white] | [dim]v2.0.1[/dim]")
+    console.print("[bold white]Demo Corporate Agent[/bold white] | [dim]v2.0.1[/dim]")
     
     if is_protected:
         console.print("Security Status: [bold green]PROTECTED (Active)[/bold green]")

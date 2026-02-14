@@ -90,3 +90,4 @@ cython_debug/
 
 # Application
 *.db
+logs/

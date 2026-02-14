@@ -54,7 +54,7 @@ rich_handler = RichHandler(
     markup=True,
     show_time=True,
     omit_repeated_times=False,
-    log_time_format="[%Y-%m-%d %H:%M:%S]" # Explicit format for Rich
+    log_time_format="[%Y-%m-%d %H:%M:%S]"
 )
 
 logger = logging.getLogger("server")
@@ -256,7 +256,7 @@ def input_monitor():
     time.sleep(2)
     
     console.print()
-    console.print(f"[bold]Server Control Interface ({SERVER_NAME})[/bold]")
+    console.print(f"[bold yellow]Server Control Interface ({SERVER_NAME})[/bold yellow]")
     console.print("[dim]Press [ENTER] to toggle Benign/Malicious Mode[/dim]")
     console.print()
 
@@ -305,5 +305,5 @@ app = Starlette(
 )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="critical") 
-    # log_level critical to hide uvicorn noise, we use our own logger
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="error") 
+    # log_level error to hide uvicorn info noise but show startup errors
