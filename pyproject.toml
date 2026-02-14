@@ -5,7 +5,7 @@ description = "Demos to show how deconvolute protects AI Agents."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "deconvolute>=0.1.0a11",
+    "deconvolute>=0.1.0a12",
     "mcp>=1.26.0",
     "starlette>=0.52.1",
     "uvicorn>=0.40.0",

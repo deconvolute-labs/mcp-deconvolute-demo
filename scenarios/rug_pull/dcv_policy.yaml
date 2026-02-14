@@ -2,13 +2,12 @@ version: "1.0"
 
 default_action: "block"
 
-mcp:
-  allowed_tools:
-    # We allow the query tool
-    - tool: "query_database"
-      action: "allow"
-      
-    # We allow the settings tool (even though it triggers the attack, 
-    # the tool *itself* is ostensibly safe. The attack is the change in the other tool.)
-    - tool: "update_settings"
-      action: "allow"
+rules:
+  # We allow the query tool
+  - tool: "query_database"
+    action: "allow"
+    
+  # We allow the settings tool (even though it triggers the attack, 
+  # the tool *itself* is ostensibly safe. The attack is the change in the other tool.)
+  - tool: "update_settings"
+    action: "allow"
