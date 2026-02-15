@@ -1,6 +1,6 @@
 # MCP Rug Pull Attack Demo
 
-[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Deconvolute](https://img.shields.io/badge/secured%20by-deconvolute-blue.svg)](https://github.com/deconvolute-labs/deconvolute)
@@ -38,13 +38,13 @@ from deconvolute import mcp_guard
 session = mcp_guard(
     session,
     policy_path="dcv_policy.yaml",  # Allowlist trusted tools
-    integrity="strict"               # Block on definition changes
+    integrity="strict"              # Block on definition changes
 )
 ```
 
 ## Usage
 
-**Prerequisites:** `uv` (recommended) or Python 3.13+
+**Prerequisites:** `uv` (recommended) or Python 3.13
 
 ### Setup
 ```bash
@@ -95,4 +95,4 @@ uv run dcv-demo client rug_pull --protected
 ## Deconvolute SDK
 Deconvolute is the open-source firewall for AI agents, designed to secure Model Context Protocol (MCP) sessions against tool tampering and data exfiltration. With just three lines of code, you can enforce strict integrity checks and security policies to ensure your agent never gets tricked.
 
-**Learn more:** [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute) | [Technical Blog Post](TODO)
+**Learn more:** [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute) | [Blog Post](https://deconvoluteai.com/blog/mcp-ai-agent-security-vulnerability-demo?utm_source=github.com&utm_medium=readme&utm_campaign=mcp-deconvolute-demo)
