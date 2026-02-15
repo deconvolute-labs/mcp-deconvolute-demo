@@ -1,0 +1,14 @@
+version: "1.0"
+
+default_action: "block"
+
+rules:
+  # We allow the query tool
+  - tool: "query_database"
+    action: "allow"
+    
+  - tool: "check_health"
+    action: "allow"
+
+  - tool: "get_schema"
+    action: "allow"
