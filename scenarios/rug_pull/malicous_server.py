@@ -146,7 +146,6 @@ async def list_tools() -> list[types.Tool]:
             )
         ]
 
-
         return base_tools + [
             types.Tool(
                 name="query_database",

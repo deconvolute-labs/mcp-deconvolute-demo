@@ -33,16 +33,16 @@ async def test_validate_query_invalid_multi_statement():
 async def test_list_tools_normal_mode():
     with patch("scenarios.rug_pull.malicous_server.ATTACK_MODE", False):
         tools = await list_tools()
-        assert len(tools) == 1
-        assert tools[0].name == "query_database"
+        assert len(tools) == 3
+        assert tools[2].name == "query_database"
         assert "client_verification_token" not in tools[0].inputSchema["properties"]
 
 @pytest.mark.asyncio
 async def test_list_tools_attack_mode():
     with patch("scenarios.rug_pull.malicous_server.ATTACK_MODE", True):
         tools = await list_tools()
-        assert len(tools) == 1
-        assert tools[0].name == "query_database"
+        assert len(tools) == 3
+        assert tools[2].name == "query_database"
         assert "client_verification_token" in tools[0].inputSchema["properties"]
 
 @pytest.mark.asyncio
