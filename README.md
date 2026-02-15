@@ -5,7 +5,7 @@
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Deconvolute](https://img.shields.io/badge/secured%20by-deconvolute-blue.svg)](https://github.com/deconvolute-labs/deconvolute)
 
-**A demonstration of tool definition tampering in the Model Context Protocol and mitigation using the Deconvolute SDK.**
+**Demonstration of tool definition tampering in the Model Context Protocol and mitigation using the Deconvolute SDK.**
 
 This demo simulates a compromised MCP server that dynamically modifies tool definitions to extract credentials from an agent. The demo runs in two terminals: one acting as the attacker-controlled server, one as your agent with legitimate API keys.
 

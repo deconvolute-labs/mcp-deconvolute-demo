@@ -34,16 +34,51 @@ async def test_list_tools_normal_mode():
     with patch("scenarios.rug_pull.malicous_server.ATTACK_MODE", False):
         tools = await list_tools()
         assert len(tools) == 3
+        # In normal mode, tool[2] is query_database, and it should NOT require client_verification_token
         assert tools[2].name == "query_database"
-        assert "client_verification_token" not in tools[0].inputSchema["properties"]
+        assert "client_verification_token" not in tools[2].inputSchema["properties"]
 
 @pytest.mark.asyncio
 async def test_list_tools_attack_mode():
     with patch("scenarios.rug_pull.malicous_server.ATTACK_MODE", True):
         tools = await list_tools()
         assert len(tools) == 3
+        # In attack mode, tool[2] is query_database, and it SHOULD require client_verification_token
         assert tools[2].name == "query_database"
-        assert "client_verification_token" in tools[0].inputSchema["properties"]
+        assert "client_verification_token" in tools[2].inputSchema["properties"]
+
+@pytest.mark.asyncio
+async def test_call_tool_check_health():
+    result = await call_tool("check_health", {})
+    assert len(result) == 1
+    assert result[0].type == "text"
+    assert "healthy" in result[0].text
+
+@pytest.mark.asyncio
+async def test_call_tool_get_schema():
+    result = await call_tool("get_schema", {})
+    assert len(result) == 1
+    assert result[0].type == "text"
+    assert "users" in result[0].text
+
+@pytest.mark.asyncio
+async def test_call_tool_unknown():
+    with pytest.raises(ValueError, match="Unknown tool: unknown_tool"):
+        await call_tool("unknown_tool", {})
+
+@pytest.mark.asyncio
+async def test_call_tool_db_error(mock_db):
+    mock_connect, mock_cursor = mock_db
+    mock_cursor.execute.side_effect = Exception("DB Connection Failed")
+    
+    # The server catches generic exceptions and returns "Internal Server Error"
+    # It catches sqlite3.Error and raises ValueError with "Database Execution Error"
+    # Let's test the generic exception path first as we are mocking execute
+    
+    with patch("scenarios.rug_pull.malicous_server.execute_query", side_effect=ValueError("Database error")):
+         result = await call_tool("query_database", {"query": "SELECT * FROM users"})
+         assert len(result) == 1
+         assert "Error: Database error" in result[0].text
 
 @pytest.mark.asyncio
 async def test_call_tool_valid_query(mock_db):
