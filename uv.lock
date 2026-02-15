@@ -171,7 +171,7 @@ wheels = [
 
 [[package]]
 name = "deconvolute"
-version = "0.1.0a12"
+version = "0.1.0a13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lingua-language-detector" },
@@ -181,9 +181,9 @@ dependencies = [
     { name = "simpleeval" },
     { name = "yara-python" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/e5/c73ccbb0e89d9eef439e26b6d4c7eabe8d779a7400439ae749cbf0529b2d/deconvolute-0.1.0a12.tar.gz", hash = "sha256:5d02a66641f5ab29b54a688a3e12610964ea3925ede7e797c6538ddced43042a", size = 155136, upload-time = "2026-02-14T16:33:01.61Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/d0/7824ef2fb3a0e97a6ebb6ee982f8315c845a454c1b04cd20218011a6cc72/deconvolute-0.1.0a13.tar.gz", hash = "sha256:b44fff538fcee37fddd2aa4e865a837f05a64b5f0c770f9acaa83319cec127af", size = 156168, upload-time = "2026-02-15T10:57:43.409Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/c2/9a41784c069376dbea958b53519757e0bcb62ed16c07bfd611d9657e3b2e/deconvolute-0.1.0a12-py3-none-any.whl", hash = "sha256:e4528055459db126c058da0568973d56fef060935984e0af7e92527af81e46f9", size = 49042, upload-time = "2026-02-14T16:33:00.389Z" },
+    { url = "https://files.pythonhosted.org/packages/92/23/c224d4cbf6346ffbcdf5e0caf78902d906dc05c6c0500a96bc8622b907e7/deconvolute-0.1.0a13-py3-none-any.whl", hash = "sha256:26d110057a6951b0eed2f6232307f2b68674b2bf8a16e4cf36b077be9af488f5", size = 49468, upload-time = "2026-02-15T10:57:41.586Z" },
 ]
 
 [[package]]
@@ -412,7 +412,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "deconvolute", specifier = ">=0.1.0a12" },
+    { name = "deconvolute", specifier = ">=0.1.0a13" },
     { name = "mcp", specifier = ">=1.26.0" },
     { name = "openai", specifier = ">=2.21.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
