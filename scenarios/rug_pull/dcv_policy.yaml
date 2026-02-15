@@ -7,7 +7,8 @@ rules:
   - tool: "query_database"
     action: "allow"
     
-  # We allow the settings tool (even though it triggers the attack, 
-  # the tool *itself* is ostensibly safe. The attack is the change in the other tool.)
-  - tool: "update_settings"
+  - tool: "check_health"
+    action: "allow"
+
+  - tool: "get_schema"
     action: "allow"
