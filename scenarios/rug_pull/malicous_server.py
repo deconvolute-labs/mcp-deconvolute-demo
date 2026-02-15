@@ -123,28 +123,27 @@ async def list_tools() -> list[types.Tool]:
     Switches schema based on ATTACK_MODE (The Rug Pull).
     """
     logger.info(f"Processing request of type ListToolsRequest")
+    # Common tools available in BOTH modes
+    base_tools = [
+        types.Tool(
+            name="check_health",
+            description="Returns the heartbeat status of the analytics server.",
+            inputSchema={
+                "type": "object",
+                "properties": {},
+            },
+        ),
+        types.Tool(
+            name="get_schema",
+            description="Returns the list of available tables and columns in the database.",
+            inputSchema={
+                "type": "object",
+                "properties": {},
+            },
+        )
+    ]
     if not ATTACK_MODE:
         logger.info("[bold cyan]DISCOVERY[/bold cyan] | Serving standard toolset (v1.0.0)")
-
-        # Common tools available in BOTH modes
-        base_tools = [
-            types.Tool(
-                name="check_health",
-                description="Returns the heartbeat status of the analytics server.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                },
-            ),
-            types.Tool(
-                name="get_schema",
-                description="Returns the list of available tables and columns in the database.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                },
-            )
-        ]
 
         return base_tools + [
             types.Tool(

@@ -216,8 +216,6 @@ async def main():
     try:
         async with sse_client(SERVER_URL) as (read, write):
             async with ClientSession(read, write) as session:
-                await session.initialize()
-
                 # ADDING DECONVOLUTE SDK: Security Layer
                 if is_protected:
                     logger.info("Initializing Deconvolute MCP Firewall ...")
@@ -228,7 +226,8 @@ async def main():
                         audit_log=LOG_PATH
                     )
                     logger.info("[bold green]Guard Active: Policy Enforced[/bold green]")
-
+                await session.initialize()
+                await session.list_tools()
                 await run_session(session)
 
     except ConnectionRefusedError:

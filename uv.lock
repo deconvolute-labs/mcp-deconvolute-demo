@@ -171,7 +171,7 @@ wheels = [
 
 [[package]]
 name = "deconvolute"
-version = "0.1.0a13"
+version = "0.1.0a14"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lingua-language-detector" },
@@ -181,9 +181,9 @@ dependencies = [
     { name = "simpleeval" },
     { name = "yara-python" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/d0/7824ef2fb3a0e97a6ebb6ee982f8315c845a454c1b04cd20218011a6cc72/deconvolute-0.1.0a13.tar.gz", hash = "sha256:b44fff538fcee37fddd2aa4e865a837f05a64b5f0c770f9acaa83319cec127af", size = 156168, upload-time = "2026-02-15T10:57:43.409Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a7/35/475f187c9836068723f302527ac2c1d049d31a7026cf726dfe0d868a897d/deconvolute-0.1.0a14.tar.gz", hash = "sha256:b6dee0364fa03a5bd7787e0a96200aed0ca9cad7c1b91b419936b2d12c4d7540", size = 156377, upload-time = "2026-02-15T12:59:25.934Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/92/23/c224d4cbf6346ffbcdf5e0caf78902d906dc05c6c0500a96bc8622b907e7/deconvolute-0.1.0a13-py3-none-any.whl", hash = "sha256:26d110057a6951b0eed2f6232307f2b68674b2bf8a16e4cf36b077be9af488f5", size = 49468, upload-time = "2026-02-15T10:57:41.586Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/8e/144af8a094135274e930cbb047573744fb2c761e96a3c4da26d66e49e20a/deconvolute-0.1.0a14-py3-none-any.whl", hash = "sha256:37c9fd8d2f182bb38689557cea29b83a36a44d9e7d00072a6e9b9a3b5099ecb9", size = 49541, upload-time = "2026-02-15T12:59:24.258Z" },
 ]
 
 [[package]]
@@ -412,7 +412,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "deconvolute", specifier = ">=0.1.0a13" },
+    { name = "deconvolute", specifier = ">=0.1.0a14" },
     { name = "mcp", specifier = ">=1.26.0" },
     { name = "openai", specifier = ">=2.21.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
@@ -554,16 +554,16 @@ wheels = [
 
 [[package]]
 name = "pydantic-settings"
-version = "2.12.0"
+version = "2.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "typing-inspection" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/43/4b/ac7e0aae12027748076d72a8764ff1c9d82ca75a7a52622e67ed3f765c54/pydantic_settings-2.12.0.tar.gz", hash = "sha256:005538ef951e3c2a68e1c08b292b5f2e71490def8589d4221b95dab00dafcfd0", size = 194184, upload-time = "2025-11-10T14:25:47.013Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/a1/ae859ffac5a3338a66b74c5e29e244fd3a3cc483c89feaf9f56c39898d75/pydantic_settings-2.13.0.tar.gz", hash = "sha256:95d875514610e8595672800a5c40b073e99e4aae467fa7c8f9c263061ea2e1fe", size = 222450, upload-time = "2026-02-15T12:11:23.476Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c1/60/5d4751ba3f4a40a6891f24eec885f51afd78d208498268c734e256fb13c4/pydantic_settings-2.12.0-py3-none-any.whl", hash = "sha256:fddb9fd99a5b18da837b29710391e945b1e30c135477f484084ee513adb93809", size = 51880, upload-time = "2025-11-10T14:25:45.546Z" },
+    { url = "https://files.pythonhosted.org/packages/b0/1a/dd1b9d7e627486cf8e7523d09b70010e05a4bc41414f4ae6ce184cf0afb6/pydantic_settings-2.13.0-py3-none-any.whl", hash = "sha256:d67b576fff39cd086b595441bf9c75d4193ca9c0ed643b90360694d0f1240246", size = 58429, upload-time = "2026-02-15T12:11:22.133Z" },
 ]
 
 [[package]]
