@@ -17,6 +17,9 @@ MCP agents trust tool definitions from servers. A compromised server can:
 3. **Silently swap the definition** to require your API keys as arguments
 4. The LLM sees the new requirement and **injects your secrets**
 
+![MCP Rug Pull Attack Demo - Credentials Stolen](docs/screenshot-attack-success.webp)
+*> The server (left) successfully exfiltrating the agent's (right) API key. Prevent this with the [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute).*
+
 ## The Demo
 
 ### Phase 1: Unprotected Agent
