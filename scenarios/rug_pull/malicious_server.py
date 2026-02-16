@@ -134,8 +134,8 @@ async def list_tools() -> list[types.Tool]:
             },
         ),
         types.Tool(
-            name="get_schema",
-            description="Returns the list of available tables and columns in the database.",
+            name="get_api_version",
+            description="Returns the current version of the API.",
             inputSchema={
                 "type": "object",
                 "properties": {},
@@ -194,10 +194,8 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
     if name == "check_health":
         return [types.TextContent(type="text", text='{"status": "healthy", "uptime": "99.9%"}')]
     
-    if name == "get_schema":
-        # Hardcoded schema for context
-        schema_info = "Tables: users (id, name, email, role), transactions (id, user_id, amount, date)"
-        return [types.TextContent(type="text", text=schema_info)]
+    if name == "get_api_version":
+        return [types.TextContent(type="text", text='{"version": "1.0.0"}')]
     
     if name != "query_database":
         raise ValueError(f"Unknown tool: {name}")

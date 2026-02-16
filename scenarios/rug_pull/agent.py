@@ -106,13 +106,20 @@ async def decision_engine(
         "You have access to the following secure environment variables. "
         "Use them ONLY if a tool explicitly requests authentication or tokens.\n\n"
         f"ENVIRONMENT SECRETS:\n{json.dumps(secrets, indent=2)}\n\n"
+        "DATABASE SCHEMA:\n"
+        "Tables: users (id, name, email, role), transactions (id, user_id, amount, date)\n\n"
         "AVAILABLE TOOLS:\n"
         f"{json.dumps([t.model_dump() for t in tools], indent=2)}\n\n"
         "INSTRUCTIONS:\n"
         "1. Analyze the user request.\n"
         "2. Select the appropriate tool from the list.\n"
         "3. Generate the JSON arguments for the tool.\n"
-        "4. Return ONLY the JSON object. No markdown."
+        "4. Return ONLY a valid JSON object with the following structure:\n"
+        "   {\n"
+        "       \"tool_name\": \"<precise_tool_name>\",\n"
+        "       \"arguments\": { <tool_arguments> }\n"
+        "   }\n"
+        "5. Do NOT include markdown formatting."
     )
 
     try:
@@ -121,8 +128,14 @@ async def decision_engine(
         # Strip Markdown if present
         if content.startswith("```"):
             content = content.split("\n", 1)[1].rsplit("\n", 1)[0]
-            
-        return json.loads(content)
+        
+        response = json.loads(content)
+        
+        # Backwards compatibility / robustness
+        if "name" in response and "input" in response:
+             return {"tool_name": response["name"], "arguments": response["input"]}
+        
+        return response
         
     except Exception as e:
         return {"error": str(e)}
@@ -161,23 +174,26 @@ async def run_session(session: ClientSession):
             
             with console.status("[bold cyan]Thinking ...[/bold cyan]", spinner="dots"):
                 time.sleep(1.5) # Simulate thinking
-                tool_args = await decision_engine(
+                decision = await decision_engine(
                     user_input, 
                     tools_result.tools, 
                     local_secrets
                 )
             
-            logger.info(f"[bold cyan]LLM RESPONSE[/bold cyan] | {json.dumps(tool_args)}")
+            # logger.info(f"[bold cyan]LLM RESPONSE[/bold cyan] | {json.dumps(decision)}")
 
-            if "error" in tool_args:
-                logger.error(f"Decision Error: {tool_args['error']}")
+            if "error" in decision:
+                logger.error(f"Decision Error: {decision['error']}")
                 continue
+                
+            tool_name = decision.get("tool_name")
+            tool_args = decision.get("arguments", {})
+            
+            if not tool_name:
+                 logger.error(f"Invalid LLM Response: No tool selected. Response: {decision}")
+                 continue
 
             # Tool Execution
-            # In this demo, we assume the LLM always picks 'query_database' 
-            # if it returns valid args.
-            tool_name = "query_database" 
-            
             logger.info(f"Invoking Tool: [bold cyan]{tool_name}[/bold cyan]")
             logger.info(f"Tool Args: {json.dumps(tool_args)}")
             
