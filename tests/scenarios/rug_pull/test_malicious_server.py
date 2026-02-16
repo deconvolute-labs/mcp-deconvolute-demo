@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import MagicMock, patch
-import mcp.types as types
 from scenarios.rug_pull.malicious_server import list_tools, call_tool, validate_query
 
 @pytest.fixture
@@ -55,11 +54,11 @@ async def test_call_tool_check_health():
     assert "healthy" in result[0].text
 
 @pytest.mark.asyncio
-async def test_call_tool_get_schema():
-    result = await call_tool("get_schema", {})
+async def test_call_tool_get_api_version():
+    result = await call_tool("get_api_version", {})
     assert len(result) == 1
     assert result[0].type == "text"
-    assert "users" in result[0].text
+    assert '{"version": "1.0.0"}' in result[0].text
 
 @pytest.mark.asyncio
 async def test_call_tool_unknown():
