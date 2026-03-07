@@ -191,19 +191,21 @@ wheels = [
 
 [[package]]
 name = "deconvolute"
-version = "0.1.0b1"
+version = "0.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cel-python" },
     { name = "lingua-language-detector" },
+    { name = "packaging" },
+    { name = "platformdirs" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
     { name = "yara-python" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f5/6b/72f112f0a3400752d4fc599823f6c2f40b1829e314694ec975109da0e9e9/deconvolute-0.1.0b1.tar.gz", hash = "sha256:6c3e8c1754c29fe863ac3fce974d9577b3917a4dfd9fe68c540278cd6cba320b", size = 183098, upload-time = "2026-02-25T14:15:03.551Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e1/f9/f8791bbf80256431af61499277edbdd6232d435a7f4d4227f5ae1be682aa/deconvolute-0.1.1.tar.gz", hash = "sha256:be479e80ac993531e1e8162e7381105015bb3c8bbb1dded80333388d4fe6aaeb", size = 185737, upload-time = "2026-03-07T20:35:21.141Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/66/4e8eea063343284d9022826b3a62299041bc94f9e9bbfbac225815869d6b/deconvolute-0.1.0b1-py3-none-any.whl", hash = "sha256:6731cde6ba4922871eab91769cd5df4bfa76416fc9ef82e804e46aa5057d0a01", size = 54446, upload-time = "2026-02-25T14:15:01.957Z" },
+    { url = "https://files.pythonhosted.org/packages/73/57/b86582005ab2a25df84fdea48e5fef50fd9fc772312a922b72866af62899/deconvolute-0.1.1-py3-none-any.whl", hash = "sha256:474183c3204c0d662b23ee9469a0cbb6a87eb50661a7aa489424ba36052d7f9b", size = 61843, upload-time = "2026-03-07T20:35:19.498Z" },
 ]
 
 [[package]]
@@ -480,7 +482,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "deconvolute", specifier = ">=0.1.0a15" },
+    { name = "deconvolute", specifier = ">=0.1.1" },
     { name = "mcp", specifier = ">=1.26.0" },
     { name = "openai", specifier = ">=2.21.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
@@ -565,6 +567,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/9e/567376582da58f5fe8e4f579db2bcfbf243cf619a5825bdf1023ad1436b3/pendulum-3.2.0-cp314-cp314-win_amd64.whl", hash = "sha256:e5bbb92b155cd5018b3cf70ee49ed3b9c94398caaaa7ed97fe41e5bb5a968418", size = 258817, upload-time = "2026-01-30T11:21:53.074Z" },
     { url = "https://files.pythonhosted.org/packages/95/67/dfffd7eb50d67fa821cd4d92cf71575ead6162930202bc40dfcedf78c38c/pendulum-3.2.0-cp314-cp314-win_arm64.whl", hash = "sha256:d53134418e04335c3029a32e9341cccc9b085a28744fb5ee4e6a8f5039363b1a", size = 253292, upload-time = "2026-01-30T11:21:54.484Z" },
     { url = "https://files.pythonhosted.org/packages/02/fb/d65db067a67df7252f18b0cb7420dda84078b9e8bfb375215469c14a50be/pendulum-3.2.0-py3-none-any.whl", hash = "sha256:f3a9c18a89b4d9ef39c5fa6a78722aaff8d5be2597c129a3b16b9f40a561acf3", size = 114111, upload-time = "2026-01-30T11:22:22.361Z" },
+]
+
+[[package]]
+name = "platformdirs"
+version = "4.9.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/56/8d4c30c8a1d07013911a8fdbd8f89440ef9f08d07a1b50ab8ca8be5a20f9/platformdirs-4.9.4.tar.gz", hash = "sha256:1ec356301b7dc906d83f371c8f487070e99d3ccf9e501686456394622a01a934", size = 28737, upload-time = "2026-03-05T18:34:13.271Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/63/d7/97f7e3a6abb67d8080dd406fd4df842c2be0efaf712d1c899c32a075027c/platformdirs-4.9.4-py3-none-any.whl", hash = "sha256:68a9a4619a666ea6439f2ff250c12a853cd1cbd5158d258bd824a7df6be2f868", size = 21216, upload-time = "2026-03-05T18:34:12.172Z" },
 ]
 
 [[package]]
