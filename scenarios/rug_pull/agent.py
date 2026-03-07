@@ -25,7 +25,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "secrets.env"))
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 POLICY_PATH = os.path.join(CURRENT_DIR, "dcv_policy.yaml")
 SERVER_URL = "http://localhost:8000/sse/"
-LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(CURRENT_DIR)), "logs")
+CACHE_PATH = os.path.join(os.path.dirname(os.path.dirname(CURRENT_DIR)), "cache")
 
 # Deconvolute Support
 try:
@@ -240,7 +240,8 @@ async def main():
                 # ADDING DECONVOLUTE SDK: Security Layer
                 if is_protected:
                     logger.info("Initializing Deconvolute MCP Firewall ...")
-                    os.environ["DECONVOLUTE_CACHE_DIR"] = LOG_PATH
+                    # Use a local cache dir
+                    os.environ["DECONVOLUTE_CACHE_DIR"] = CACHE_PATH
                     session = mcp_guard(
                         session,
                         policy_path=POLICY_PATH,
