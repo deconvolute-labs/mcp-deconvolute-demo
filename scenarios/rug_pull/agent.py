@@ -25,13 +25,12 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "secrets.env"))
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 POLICY_PATH = os.path.join(CURRENT_DIR, "dcv_policy.yaml")
 SERVER_URL = "http://localhost:8000/sse/"
-LOG_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(CURRENT_DIR)), "logs", "audit.jsonl"
-)
+CACHE_PATH = os.path.join(os.path.dirname(os.path.dirname(CURRENT_DIR)), "cache")
 
 # Deconvolute Support
 try:
     from deconvolute import mcp_guard
+
     DECONVOLUTE_AVAILABLE = True
 except ImportError:
     DECONVOLUTE_AVAILABLE = False
@@ -39,15 +38,17 @@ except ImportError:
 # Logging Setup
 # Logging Setup
 # Custom theme to match server (white timestamps)
-custom_theme = Theme({
-    "logging.level.info": "white",
-    "logging.level.warning": "yellow",
-    "logging.level.error": "red",
-    "logging.level.critical": "bold red reverse",
-    "repr.number": "bold cyan",
-    "repr.str": "green",
-    "log.time": "white", 
-})
+custom_theme = Theme(
+    {
+        "logging.level.info": "white",
+        "logging.level.warning": "yellow",
+        "logging.level.error": "red",
+        "logging.level.critical": "bold red reverse",
+        "repr.number": "bold cyan",
+        "repr.str": "green",
+        "log.time": "white",
+    }
+)
 
 from rich.highlighter import NullHighlighter
 
@@ -65,11 +66,12 @@ logging.basicConfig(
             show_time=True,
             omit_repeated_times=False,
             log_time_format="[%Y-%m-%d %H:%M:%S]",
-            highlighter=NullHighlighter()
+            highlighter=NullHighlighter(),
         )
-    ]
+    ],
 )
 logger = logging.getLogger("agent")
+
 
 class DuplicateFilter(logging.Filter):
     def __init__(self):
@@ -77,7 +79,7 @@ class DuplicateFilter(logging.Filter):
         self.last_log = None
 
     def filter(self, record):
-        # We must format the message to check for duplicates, 
+        # We must format the message to check for duplicates,
         # because the raw record.msg might be a format string like "Request: %s"
         # which is identical for all requests.
         current_log = (record.levelno, record.getMessage())
@@ -86,18 +88,16 @@ class DuplicateFilter(logging.Filter):
         self.last_log = current_log
         return True
 
+
 # Apply filter to httpx to reduce noise
 logging.getLogger("httpx").addFilter(DuplicateFilter())
 
 
 async def decision_engine(
-    user_input: str, 
-    tools: list[Tool], 
-    secrets: dict[str, str], 
-    model: str = "gpt-4o"
+    user_input: str, tools: list[Tool], secrets: dict[str, str], model: str = "gpt-4o"
 ) -> dict[str, Any]:
     """
-    The 'Brain' of the Agent. 
+    The 'Brain' of the Agent.
     Decides which tool to call and generates arguments based on context and secrets.
     """
     # Construct the 'Vulnerable' System Prompt
@@ -116,33 +116,34 @@ async def decision_engine(
         "3. Generate the JSON arguments for the tool.\n"
         "4. Return ONLY a valid JSON object with the following structure:\n"
         "   {\n"
-        "       \"tool_name\": \"<precise_tool_name>\",\n"
-        "       \"arguments\": { <tool_arguments> }\n"
+        '       "tool_name": "<precise_tool_name>",\n'
+        '       "arguments": { <tool_arguments> }\n'
         "   }\n"
         "5. Do NOT include markdown formatting."
     )
 
     try:
         content = await llm(user_input, system_prompt=system_prompt, model=model)
-        
+
         # Strip Markdown if present
         if content.startswith("```"):
             content = content.split("\n", 1)[1].rsplit("\n", 1)[0]
-        
+
         response = json.loads(content)
-        
+
         # Backwards compatibility / robustness
         if "name" in response and "input" in response:
-             return {"tool_name": response["name"], "arguments": response["input"]}
-        
+            return {"tool_name": response["name"], "arguments": response["input"]}
+
         return response
-        
+
     except Exception as e:
         return {"error": str(e)}
 
+
 async def run_session(session: ClientSession):
     """Interactive loop handling user input and tool execution."""
-    
+
     console.print()
     console.print("[bold cyan]Connected to Secure Analytics Provider[/bold cyan]")
     console.print("[dim]Type 'exit' to quit.[/dim]")
@@ -152,7 +153,7 @@ async def run_session(session: ClientSession):
     local_secrets = {
         "SECRET_DEMO_KEY": os.getenv("SECRET_DEMO_KEY"),
         "AWS_ACCESS_KEY_ID": os.getenv("AWS_ACCESS_KEY_ID"),
-        "DATABASE_URL": os.getenv("DATABASE_URL")
+        "DATABASE_URL": os.getenv("DATABASE_URL"),
     }
 
     while True:
@@ -165,47 +166,49 @@ async def run_session(session: ClientSession):
                 break
 
             # Refresh Tools
-            # Essential step: Getting the latest definition allows the agent 
+            # Essential step: Getting the latest definition allows the agent
             # to 'see' the malicious change (or for the SDK to block it).
             tools_result = await session.list_tools()
-            
+
             # Decision Engine
             logger.info(f"[bold white]USER QUERY[/bold white] | {user_input}")
-            
+
             with console.status("[bold cyan]Thinking ...[/bold cyan]", spinner="dots"):
-                time.sleep(1.5) # Simulate thinking
+                time.sleep(1.5)  # Simulate thinking
                 decision = await decision_engine(
-                    user_input, 
-                    tools_result.tools, 
-                    local_secrets
+                    user_input, tools_result.tools, local_secrets
                 )
-            
+
             # logger.info(f"[bold cyan]LLM RESPONSE[/bold cyan] | {json.dumps(decision)}")
 
             if "error" in decision:
                 logger.error(f"Decision Error: {decision['error']}")
                 continue
-                
+
             tool_name = decision.get("tool_name")
             tool_args = decision.get("arguments", {})
-            
+
             if not tool_name:
-                 logger.error(f"Invalid LLM Response: No tool selected. Response: {decision}")
-                 continue
+                logger.error(
+                    f"Invalid LLM Response: No tool selected. Response: {decision}"
+                )
+                continue
 
             # Tool Execution
             logger.info(f"Invoking Tool: [bold cyan]{tool_name}[/bold cyan]")
             logger.info(f"Tool Args: {json.dumps(tool_args)}")
-            
-            with console.status("[bold cyan]Executing remote procedure...[/bold cyan]", spinner="dots"):
-                time.sleep(1.0) # Simulate network latency
+
+            with console.status(
+                "[bold cyan]Executing remote procedure...[/bold cyan]", spinner="dots"
+            ):
+                time.sleep(1.0)  # Simulate network latency
                 result = await session.call_tool(tool_name, arguments=tool_args)
 
             # Output
             if result.isError:
                 logger.error(f"Remote Error: {result.content[0].text}")
             else:
-                logger.info(f"[green]SUCCESS[/green] | Server Response Received")
+                logger.info("[green]SUCCESS[/green] | Server Response Received")
                 console.print(f"\n[bold]Response:[/bold]\n{result.content[0].text}\n")
 
         except Exception as e:
@@ -218,14 +221,16 @@ async def main():
 
     # Header
     console.print("[bold white]Demo Corporate Agent[/bold white] | [dim]v2.0.1[/dim]")
-    
+
     if is_protected:
         console.print("Security Status: [bold green]PROTECTED (Active)[/bold green]")
         if not DECONVOLUTE_AVAILABLE:
             logger.critical("FATAL: Deconvolute SDK not found.")
             return
     else:
-        console.print("Security Status: [bold yellow]UNPROTECTED (Vulnerable)[/bold yellow]")
+        console.print(
+            "Security Status: [bold yellow]UNPROTECTED (Vulnerable)[/bold yellow]"
+        )
 
     logger.info(f"Establishing connection to {SERVER_URL}...")
 
@@ -235,19 +240,24 @@ async def main():
                 # ADDING DECONVOLUTE SDK: Security Layer
                 if is_protected:
                     logger.info("Initializing Deconvolute MCP Firewall ...")
+                    # Use a local cache dir
+                    os.environ["DECONVOLUTE_CACHE_DIR"] = CACHE_PATH
                     session = mcp_guard(
                         session,
                         policy_path=POLICY_PATH,
                         integrity="strict",
-                        audit_log=LOG_PATH
                     )
-                    logger.info("[bold green]Guard Active: Policy Enforced[/bold green]")
+                    logger.info(
+                        "[bold green]Guard Active: Policy Enforced[/bold green]"
+                    )
                 await session.initialize()
                 await session.list_tools()
                 await run_session(session)
 
     except ConnectionRefusedError:
-        logger.critical("[bold red]Connection Failed:[/bold red] Ensure server is running on port 8000.")
+        logger.critical(
+            "[bold red]Connection Failed:[/bold red] Ensure server is running on port 8000."
+        )
     except KeyboardInterrupt:
         console.print("\n[dim]Session terminated.[/dim]")
 
