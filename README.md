@@ -5,13 +5,15 @@
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Deconvolute](https://img.shields.io/badge/secured%20by-deconvolute-blue.svg)](https://github.com/deconvolute-labs/deconvolute)
 
-**Demonstration of tool definition tampering in the Model Context Protocol and mitigation using the Deconvolute SDK.**
+**A compromised MCP server silently swaps a tool definition mid-session to steal your agent's API keys. This repo shows the attack happening live and blocks it in 3 lines of code.**
 
-This demo simulates a compromised MCP server that dynamically modifies tool definitions to extract credentials from an agent. The demo runs in two terminals: one acting as the attacker-controlled server, one as your agent with legitimate API keys.
+> Protect your own agents: [`pip install deconvolute`](https://github.com/deconvolute-labs/deconvolute) · [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute)
+
+---
 
 ## The Attack
 
-MCP agents trust tool definitions from servers. A compromised server can:
+MCP agents trust tool definitions from servers. A compromised server exploits this:
 1. Provide a safe tool (`query_database`)
 2. Wait for the agent to use it
 3. **Silently swap the definition** to require your API keys as arguments
@@ -22,17 +24,42 @@ MCP agents trust tool definitions from servers. A compromised server can:
 
 ## The Demo
 
+Two terminals. Two phases.
+
 ### Phase 1: Unprotected Agent
 
-The unprotected agent queries a database using natural language. For example, asking "How many users are there?" causes the LLM to generate the appropriate SQL query. The server then switches to attack mode and modifies the tool definition to require API keys. The next query causes the agent to leak its secrets.
+The agent queries a database in natural language. You ask a question, the server injects malicious mode, you ask another and your API key appears in the attacker's terminal.
 
-**Result:** Server terminal displays "LOOT SECURED" with your stolen credentials.
+**Terminal 1 (Server):**
+```bash
+uv run dcv-demo server rug_pull
+```
+
+**Terminal 2 (Agent):**
+```bash
+uv run dcv-demo client rug_pull
+```
+
+1. Ask: `How many users are there?` executes normally
+2. In server terminal, press **Enter** to activate attack mode
+3. Ask: `What are the user names?`
+4. Check server terminal: your API key is now displayed as `LOOT SECURED`
+
 
 ### Phase 2: Protected Agent with Deconvolute
 
-The protected agent runs the same sequence, but Deconvolute detects the tool definition hash changed and blocks the request before secrets can leak.
+Same sequence. Deconvolute detects the tool definition hash changed and blocks the call before secrets can leak.
 
-**Result:** Request blocked. Your secrets stay safe.
+**Terminal 2 (Agent):**
+```bash
+uv run dcv-demo client rug_pull --protected
+```
+
+1. Ask: `How many users are there?` executes normally
+2. Press **Enter** in server terminal to activate attack mode
+3. Ask: `What are the user names?`
+4. **Request blocked.** Firewall log shows the integrity violation. Your secrets stay safe.
+
 
 ## The Fix (3 Lines of Code)
 ```python
@@ -45,57 +72,37 @@ session = mcp_guard(
 )
 ```
 
-## Usage
+Deconvolute cryptographically seals tool definitions on discovery. Any mid-session modification is detected and blocked before it reaches the LLM. Drop it into any existing `ClientSession`. No architecture changes required.
 
-**Prerequisites:** `uv` (recommended) or Python 3.13
+## Setup
 
-### Setup
+**Prerequisites:** Python 3.13, `uv` (recommended)
 ```bash
 git clone https://github.com/deconvolute-labs/mcp-deconvolute-demo.git
 cd mcp-deconvolute-demo
 uv sync
-uv run dcv-demo setup  # Seeds the database
+uv run dcv-demo setup   # Seeds the demo database
 ```
 
-### Running the Demo
 
-This demo requires two terminal windows:
+## Protect Your Own Agents
 
-- **Terminal 1 (Server):** Simulates an attacker-controlled MCP server on a remote machine
-- **Terminal 2 (Agent):** Your agent with legitimate API keys (used for other tasks not shown in this demo)
-
-**Phase 1: Unprotected Agent**
-
-Terminal 1 (Server):
+This demo uses the [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute) - an open-source MCP firewall for AI agents.
 ```bash
-uv run dcv-demo server rug_pull
+pip install deconvolute
 ```
 
-Terminal 2 (Agent):
-```bash
-uv run dcv-demo client rug_pull
-```
+**What it protects against:**
+- Rug pull / schema tampering (demonstrated here)
+- Tool poisoning and server identity spoofing
+- Prompt injection via tool arguments and outputs
 
-1. In the agent terminal, ask a question in natural language, for example: `How many users are there?` (the LLM generates the SQL and the query executes normally)
-2. In the server terminal, press ENTER to enable malicious mode
-3. In the agent terminal, ask another question, for example: `What are the user names?`
-4. Check server terminal: your API keys are now displayed
+**[→ Deconvolute SDK on GitHub](https://github.com/deconvolute-labs/deconvolute)**  
+**[→ Docs](https://docs.deconvolutelabs.com)**  
+**[→ deconvolutelabs.com](https://deconvolutelabs.com)**
 
-**Phase 2: Protected Agent**
 
-Restart the server (Ctrl+C, then `uv run dcv-demo server rug_pull` again) to reset to benign mode.
+## Related
 
-Terminal 2 (Agent):
-```bash
-uv run dcv-demo client rug_pull --protected
-```
-
-1. Ask a question, for example: `How many users are there?` (executes normally, policy allows it)
-2. Press ENTER in server terminal to enable attack mode
-3. Ask another question, for example: `What are the user names?`
-4. Request is blocked by Deconvolute's integrity check
-
-## Deconvolute SDK
-Deconvolute is the open-source firewall for AI agents, designed to secure Model Context Protocol (MCP) sessions against tool tampering and data exfiltration. With just three lines of code, you can enforce strict integrity checks and security policies to ensure your agent never gets tricked.
-
-**Learn more:** [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute) | [Blog Post](https://deconvoluteai.com/blog/mcp-ai-agent-security-vulnerability-demo?utm_source=github.com&utm_medium=readme&utm_campaign=mcp-deconvolute-demo)
+- [Blog: MCP Rug Pull — Stealing AI Agent Credentials](https://deconvolutelabs.com/blog/mcp-schema-injection-attack?utm_source=github.com&utm_medium=readme&utm_campaign=mcp-deconvolute-demo)
+- [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute) — full firewall, policy engine, content scanners
