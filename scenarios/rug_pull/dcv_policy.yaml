@@ -4,6 +4,7 @@ default_action: "block"
 
 servers:
   prod-analytics-sql-01:
+    version: ">=1.0.0"
     tools:
       # We allow the query tool
       - name: "query_database"
