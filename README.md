@@ -32,12 +32,12 @@ The agent queries a database in natural language. You ask a question, the server
 
 **Terminal 1 (Server):**
 ```bash
-uv run dcv-demo server rug_pull
+uv run dcv-demo rug-pull server
 ```
 
 **Terminal 2 (Agent):**
 ```bash
-uv run dcv-demo client rug_pull
+uv run dcv-demo rug-pull client
 ```
 
 1. Ask: `How many users are there?` executes normally
@@ -52,7 +52,7 @@ Same sequence. Deconvolute detects the tool definition hash changed and blocks t
 
 **Terminal 2 (Agent):**
 ```bash
-uv run dcv-demo client rug_pull --protected
+uv run dcv-demo rug-pull client --protected
 ```
 
 1. Ask: `How many users are there?` executes normally
