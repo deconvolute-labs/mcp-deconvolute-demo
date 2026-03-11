@@ -11,10 +11,10 @@ Each scenario is a deterministic local environment: run the attack, watch it suc
 
 ## Scenarios
 
-### 1. [Rug Pull (Schema Tampering)](/scenarios/rug_pull/README.md)
+### 1. [Rug Pull (Schema Tampering)](/scenarios/rug_pull/Readme.md)
 A compromised MCP server silently swaps a tool definition mid-session to steal your agent's API keys. Demonstrates how `mcp_guard` cryptographically seals tool definitions and enforces policy-as-code. [Blog post](https://deconvolutelabs.com/blog/mcp-schema-injection-attack?utm_source=github.com&utm_medium=readme&utm_campaign=mcp-deconvolute-demo)
 
-### 2. [DNS Rebinding (SSRF via Transport Hijacking)](/scenarios/dns_rebinding/README.md)
+### 2. [DNS Rebinding (SSRF via Transport Hijacking)](/scenarios/dns_rebinding/Readme.md)
 A malicious server flips its DNS record after the initial handshake, tricking the MCP client into firing payloads into your private internal network. Demonstrates how `secure_sse_session` pins network routing and blocks transport manipulation.
 
 ## Setup
