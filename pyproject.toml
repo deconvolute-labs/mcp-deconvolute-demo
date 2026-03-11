@@ -21,6 +21,9 @@ dcv-demo = "cli:app"
 [tool.uv]
 package = true
 
+[tool.uv.sources]
+deconvolute = { path = "../deconvolute", editable = true }
+
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"

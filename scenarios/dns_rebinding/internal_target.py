@@ -8,7 +8,7 @@ async def messages_endpoint(request):
     body = await request.body()
     
     print("\n" + "="*60)
-    print("🚨 CRITICAL ALERT: DNS REBINDING ATTACK SUCCESSFUL 🚨")
+    print("CRITICAL ALERT: DNS REBINDING ATTACK SUCCESSFUL")
     print("="*60)
     print("An unauthorized payload was sent to the internal network!")
     print(f"Target Hit: 127.0.0.2 (Internal Admin Interface)")

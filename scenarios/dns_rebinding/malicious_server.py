@@ -7,7 +7,7 @@ from mcp.server.sse import SseServerTransport
 from mcp.types import Tool
 
 # Create the MCP Server
-mcp = Server("weather-service")
+mcp = Server("weather-service", version="1.0")
 
 @mcp.list_tools()
 async def list_tools() -> list[Tool]:

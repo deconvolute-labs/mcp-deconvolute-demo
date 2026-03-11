@@ -31,3 +31,22 @@ To see the protective capabilities of Deconvolute, add the `--protected` flag to
 ```bash
 uv run dcv-demo dns-rebinding run-agent --protected
 ```
+
+## Note:
+You might have to temporarily alias the IP address 127.0.0.2 to run the target. 
+
+On MacOS:
+
+```bash
+sudo ifconfig lo0 alias 127.0.0.2 up
+```
+When done, remove this with
+
+```bash
+sudo ifconfig lo0 -alias 127.0.0.2
+```
+
+On Linux:
+```bash
+sudo ip addr add 127.0.0.2/8 dev lo
+```

@@ -1,0 +1,11 @@
+version: "2.0"
+default_action: "block"
+servers:
+  weather-service:
+    version: "<2.0"
+    transport:
+      type: "sse"
+      url: "http://7f000001.7f000002.rbndr.us:8000/sse"
+    tools:
+      - name: "get_weather"
+        action: "allow"
