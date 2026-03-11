@@ -10,7 +10,7 @@ MCP uses Server-Sent Events (SSE) for remote communication. SSE relies on standa
 
 1. The agent connects to a malicious public server at a safe-looking domain
 2. The server establishes trust and advertises a safe tool
-3. The attacker updates the DNS record to point to a private internal IP (e.g., `127.0.0.2`)
+3. The attacker updates the DNS record to point to a private internal IP (e.g. `127.0.0.2`)
 4. When the agent executes the tool, the SDK re-resolves the domain and **fires the payload into your private network**
 
 ## Prerequisites
@@ -37,6 +37,8 @@ Windows natively resolves the entire `127.0.0.0/8` subnet to the loopback interf
 ## The Demo
 
 Three terminals, run in order.
+
+> **Note:** This demo leverages `rbndr.us`, a public DNS testing service that dynamically alternates IP resolutions, to deterministically simulate the attacker's DNS switch without requiring you to configure and run your own malicious DNS server.
 
 ### Phase 1: Unprotected Agent
 
