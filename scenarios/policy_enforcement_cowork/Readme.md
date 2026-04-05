@@ -33,7 +33,7 @@ version: "2.0"
 default_action: block
 
 servers:
-  YOUR_SERVER_NAME:
+  github-mcp-server:
     tools:
       - name: "list_issues"
         action: allow
@@ -47,8 +47,6 @@ servers:
       - name: "*"
         action: block
 ```
-
-Replace `YOUR_SERVER_NAME` with the name the GitHub MCP server reports during initialization. Check proxy startup logs on first run to confirm.
 
 ### 2. Start the proxy and tunnel
 
