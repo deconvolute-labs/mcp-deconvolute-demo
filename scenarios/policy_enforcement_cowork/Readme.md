@@ -9,7 +9,8 @@
 - **Observability:** Every tool call the agent makes is logged to a structured audit database and visualized in the enterprise platform dashboard.
 - **Policy enforcement:** The proxy blocks tool calls that violate the declared policy before they reach the upstream server, regardless of what the model decided.
 
-Note: Claude Cowork detects obvious prompt injection attempts at the model level. That detection is non-deterministic and model-version-dependent. The proxy enforces the same policy on every call regardless of model behavior or version.
+> [!NOTE]
+> Claude Cowork detects obvious prompt injection attempts at the model level. That detection is non-deterministic and model-version-dependent. The proxy enforces the same policy on every call regardless of model behavior or version.
 
 ## Prerequisites
 
