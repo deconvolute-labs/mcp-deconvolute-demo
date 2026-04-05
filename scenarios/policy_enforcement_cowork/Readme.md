@@ -151,10 +151,11 @@ The Notion triage entry is created successfully despite the blocked call.
 In the proxy logs:
 
 ```bash
-INFO  deconvolute  Firewall: Blocked tool 'search_code' -- policy violation
+INFO  mcp.server.lowlevel.server  Processing request of type CallToolRequest
+INFO  deconvolute_proxy.upstream  Tool call: search_code
+WARNING  deconvolute  MCPProxy: Blocked tool 'search_code': Policy violation
+WARNING  deconvolute_proxy.upstream  Tool call blocked or errored: search_code
 ```
-
-In the enterprise platform dashboard, the blocked call appears in the Live Feed within one second.
 
 Verify in the audit database:
 
