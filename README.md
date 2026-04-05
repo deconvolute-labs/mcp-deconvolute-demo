@@ -40,7 +40,7 @@ Scenario 3 requires additional setup. See the [Readme](/scenarios/policy_enforce
 
 Each scenario in this repo runs in two modes: unprotected and protected. The protected mode uses the [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute), an open-source MCP security SDK that wraps your existing agent session and enforces runtime policy.
 
-In the rug pull scenario it cryptographically seals tool definitions at discovery time, so any mid-session swap is caught before the LLM ever sees the modified schema. In the DNS rebinding scenario it pins the resolved IP address to the network socket at connection time, so DNS manipulation has no effect on where requests actually go. In the prompt injection scenario it enforces a least-privilege policy on the MCP tool call surface via the [Deconvolute proxy](https://github.com/deconvolute-labs/deconvolute-proxy), blocking write operations before they reach the upstream server.
+In the rug pull scenario it cryptographically seals tool definitions at discovery time, so any mid-session swap is caught before the LLM ever sees the modified schema. In the DNS rebinding scenario it pins the resolved IP address to the network socket at connection time, so DNS manipulation has no effect on where requests actually go. In the policy enforcement scenario it enforces argument-level policy via CEL conditions at the MCP tool call surface, blocking cross-scope tool calls before they reach the upstream server.
 
 ```bash
 pip install deconvolute
