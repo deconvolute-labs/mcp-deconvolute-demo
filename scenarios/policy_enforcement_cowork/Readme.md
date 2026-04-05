@@ -2,7 +2,7 @@
 
 **A GitHub issue triage agent attempts a cross-repository code search that violates its declared policy. The Deconvolute Proxy intercepts it, blocks it, and logs it in real time. The triage workflow completes successfully.**
 
-> Protect your own agents: [`pip install deconvolute`](https://github.com/deconvolute-labs/deconvolute)
+> Connect your own agents: [deconvolute-proxy](https://github.com/deconvolute-labs/deconvolute-proxy)
 
 ## What This Demonstrates
 
