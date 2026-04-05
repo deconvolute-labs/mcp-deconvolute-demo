@@ -1,6 +1,6 @@
 # Agent Policy Enforcement and Observability (Issue Triage)
 
-**A GitHub issue triage agent attempts a cross-repository code search that violates its declared policy. The Deconvolute proxy intercepts it, blocks it, and logs it in real time. The triage workflow completes successfully.**
+**A GitHub issue triage agent attempts a cross-repository code search that violates its declared policy. The Deconvolute Proxy intercepts it, blocks it, and logs it in real time. The triage workflow completes successfully.**
 
 > Protect your own agents: [`pip install deconvolute`](https://github.com/deconvolute-labs/deconvolute)
 
@@ -125,7 +125,7 @@ Make sure the Notion database `Demo: Issue Triage Backlog` exists in the path yo
 
 ## Running the Demo
 
-Start a new Cowork conversation with the proxy connector and Notion connector enabled.
+Start a new Cowork conversation with the Proxy connector and Notion connector enabled.
 
 Use this prompt:
 
@@ -185,10 +185,11 @@ We can see that the `search code` request was marked as `unsafe` and blocked.
 
 1. Delete or remove the `demo-issue` label from the issue
 2. Clear the Notion demo database
-3. Stop the proxy and ngrok
+3. Stop the Proxy and ngrok
 
 ## Related
 
 - [deconvolute-proxy](https://github.com/deconvolute-labs/deconvolute-proxy)
 - [Deconvolute SDK](https://github.com/deconvolute-labs/deconvolute)
+- [Documentation](https://docs.deconvolutelabs.com?utm_source=github.com&utm_medium=readme_policy_demo&utm_campaign=mcp-deconvolute-demo)
 - Blog post: *link to be added*

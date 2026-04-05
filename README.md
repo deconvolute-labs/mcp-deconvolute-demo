@@ -13,7 +13,7 @@ Each scenario is a deterministic local environment: run the attack, watch it suc
 
 ### 1. [Rug Pull (Schema Tampering)](/scenarios/rug_pull/Readme.md)
 
-A compromised MCP server silently swaps a tool definition mid-session to steal your agent's API keys. Demonstrates how `mcp_guard` cryptographically seals tool definitions and enforces policy-as-code. [Blog post](https://deconvolutelabs.com/blog/mcp-schema-injection-attack?utm_source=github.com&utm_medium=readme&utm_campaign=mcp-deconvolute-demo)
+A compromised MCP server silently swaps a tool definition mid-session to steal your agent's API keys. Demonstrates how `mcp_guard` cryptographically seals tool definitions and enforces policy-as-code. [Blog post](https://deconvolutelabs.com/blog/mcp-schema-injection-attack?utm_source=github.com&utm_medium=readme_main&utm_campaign=mcp-deconvolute-demo)
 
 ### 2. [DNS Rebinding (SSRF via Transport Hijacking)](/scenarios/dns_rebinding/Readme.md)
 
@@ -46,4 +46,4 @@ In the rug pull scenario it cryptographically seals tool definitions at discover
 pip install deconvolute
 ```
 
-[Protect your own agents](https://github.com/deconvolute-labs/deconvolute) · [Integration docs](https://docs.deconvolutelabs.com) · [deconvolutelabs.com](https://deconvolutelabs.com)
+[Protect your own agents](https://github.com/deconvolute-labs/deconvolute) · [Integration docs](https://docs.deconvolutelabs.com?utm_source=github.com&utm_medium=readme_main&utm_campaign=mcp-deconvolute-demo) · [deconvolutelabs.com](https://deconvolutelabs.com?utm_source=github.com&utm_medium=readme_main&utm_campaign=mcp-deconvolute-demo)
