@@ -22,6 +22,7 @@ A malicious server flips its DNS record after the initial handshake, tricking th
 ### 3. [Agent Policy Enforcement and Observability (Issue Triage)](/scenarios/policy_enforcement_cowork/Readme.md)
 
 A GitHub issue triage agent in Claude Cowork attempts a tool call outside its declared policy. The Deconvolute proxy intercepts it, blocks it, and logs it in real time. Demonstrates policy-as-code enforcement at the MCP tool call surface and live observability via the enterprise platform dashboard. Requires Claude Desktop with Cowork enabled.
+[Blog post](https://deconvolutelabs.com/blog/mcp-policy-enforcement-claude-cowork-live-demo?utm_source=github.com&utm_medium=readme_main&utm_campaign=mcp-deconvolute-demo)
 
 ## Setup
 
